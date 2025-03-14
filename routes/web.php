@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LocationController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +22,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+Route::resource('locations', LocationController::class);
+Route::get('/api/locations', [LocationController::class, 'getLocations'])->name('api.locations');
