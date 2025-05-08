@@ -20,11 +20,9 @@
             {!! Form::open(['route' => 'locations.store']) !!}
 
             <div class="card-body">
-
                 <div class="row">
                     @include('locations.fields')
                 </div>
-
             </div>
 
             <div class="card-footer">
@@ -35,5 +33,48 @@
             {!! Form::close() !!}
 
         </div>
+
+        {{-- Map DITARUH DI BAWAH FORM --}}
+        <div class="card mt-4">
+            <div class="card-header">
+                <strong>Pilih Lokasi di Peta</strong>
+            </div>
+            <div class="card-body">
+                <div id="map" style="height: 400px;"></div>
+            </div>
+        </div>
     </div>
+
+    {{-- Leaflet CSS & JS --}}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var defaultLat = -0.5021;
+            var defaultLng = 117.1537;
+
+            var map = L.map('map').setView([defaultLat, defaultLng], 13);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            var marker;
+
+            map.on('click', function (e) {
+                var lat = e.latlng.lat.toFixed(6);
+                var lng = e.latlng.lng.toFixed(6);
+
+                document.getElementById('latitude').value = lat;
+                document.getElementById('longitude').value = lng;
+
+                if (marker) {
+                    marker.setLatLng(e.latlng);
+                } else {
+                    marker = L.marker(e.latlng).addTo(map);
+                }
+            });
+        });
+    </script>
 @endsection
