@@ -65,8 +65,8 @@
             var marker = L.marker([defaultLat, defaultLng]).addTo(map);
 
             map.on('click', function (e) {
-                var lat = e.latlng.lat.toFixed(6);
-                var lng = e.latlng.lng.toFixed(6);
+                var lat = e.latlng.lat.toFixed(10);
+                var lng = e.latlng.lng.toFixed(10);
 
                 document.getElementById('latitude').value = lat;
                 document.getElementById('longitude').value = lng;

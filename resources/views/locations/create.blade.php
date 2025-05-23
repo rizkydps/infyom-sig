@@ -40,15 +40,17 @@
                 <strong>Pilih Lokasi di Peta</strong>
             </div>
             <div class="card-body">
-                <div id="map" style="height: 400px;"></div>
+                {{-- <div id="map" style="height: 400px;"></div> --}}
+                <div id="map" style="height: 500px; margin-top: 50px"></div>
             </div>
         </div>
     </div>
 
     {{-- Leaflet CSS & JS --}}
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
+     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script> 
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+{{-- 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             var defaultLat = -0.5021;
@@ -76,5 +78,63 @@
                 }
             });
         });
-    </script>
+    </script> --}}
+<script>
+    var curLocation = [0, 0];
+
+    if (curLocation[0] === 0 && curLocation[1] === 0) {
+        curLocation = [-0.5021, 117.1537];
+    }
+
+    var osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        osmAttrib = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        osm = L.tileLayer(osmUrl, { maxZoom: 18, attribution: osmAttrib });
+
+    var map = L.map('map').setView(curLocation, 13).addLayer(osm);
+    map.attributionControl.setPrefix(false);
+
+    var marker = new L.marker(curLocation, {
+        draggable: true
+    });
+
+    // Update input saat marker digeser
+    marker.on('dragend', function (event) {
+        var position = marker.getLatLng();
+        marker.setLatLng(position, { draggable: true }).bindPopup(position).update();
+        document.getElementById("latitude").value = position.lat.toFixed(10);
+        document.getElementById("longitude").value = position.lng.toFixed(10);
+    });
+
+    // Update marker saat input berubah
+    document.getElementById("latitude").addEventListener("change", updateMarkerPosition);
+    document.getElementById("longitude").addEventListener("change", updateMarkerPosition);
+
+    function updateMarkerPosition() {
+        var lat = parseFloat(document.getElementById("latitude").value);
+        var lng = parseFloat(document.getElementById("longitude").value);
+        if (!isNaN(lat) && !isNaN(lng)) {
+            var position = [lat, lng];
+            marker.setLatLng(position, { draggable: true }).bindPopup(position).update();
+            map.panTo(position);
+        }
+    }
+
+    // Update marker dan input saat peta diklik
+    map.on('click', function (e) {
+        var lat = e.latlng.lat.toFixed(10);
+        var lng = e.latlng.lng.toFixed(10);
+
+        document.getElementById("latitude").value = lat;
+        document.getElementById("longitude").value = lng;
+
+        marker.setLatLng(e.latlng).bindPopup(e.latlng).update();
+    });
+
+    map.addLayer(marker);
+</script>
+
+
+
+
+    
 @endsection

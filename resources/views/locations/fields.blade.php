@@ -7,11 +7,11 @@
 <!-- Latitude Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('latitude', 'Latitude:') !!}
-    {!! Form::text('latitude', null, ['class' => 'form-control']) !!}
+    {!! Form::text('latitude', null, ['class' => 'form-control', 'id' => 'latitude']) !!}
 </div>
 
 <!-- Longitude Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('longitude', 'Longitude:') !!}
-    {!! Form::text('longitude', null, ['class' => 'form-control']) !!}
+    {!! Form::text('longitude', null, ['class' => 'form-control', 'id' => 'longitude']) !!}
 </div>
